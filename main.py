@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import pprint
 
 from departments import DEPARTMENTS
 from cities import CITIES
@@ -52,6 +53,12 @@ class InseeData:
         if self._gender == "1":
             return "Male"
         return "Female"
+
+    @property
+    def gender_short(self):
+        if self._gender == "1":
+            return "M"
+        return "F"
 
     @property
     def city(self):
@@ -113,12 +120,40 @@ class InseeData:
 
         return "\n".join(message)
 
+    def to_dict(self):
+        data = {
+            "is_valid": self.is_valid,
+            "gender": self.gender_short,
+            "month": self.month,
+            "year": self.year,
+            "order_of_birth": self.order_of_birth,
+        }
+
+        if self.foreign:
+            data["foreigner"] = {
+                "countries_names": COUNTRIES.get("99" + self.country, []),
+                "country_code": self.country,
+                "continent": CONTINENTS.get(self.country[0]),
+            }
+        else:
+            city = CITIES.get(self.department + self.city, dict())
+            data["french"] = {
+                "department_name": DEPARTMENTS[self.department],
+                "city_insee_code": self.city,
+                "department_code": self.department,
+                "city_name": city.get("name"),
+                "zip_code": city.get("zip_code"),
+            }
+
+        return data
+
 
 def main():
     # insee_number = "168127982980507"
     insee_number = "269059913116714"
     data = InseeData(insee_number)
     print(data)
+    pprint.pprint(data.to_dict())
 
 
 main()
