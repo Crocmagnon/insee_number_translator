@@ -2,9 +2,9 @@ import calendar
 import datetime
 import pprint
 
-from departments import DEPARTMENTS
-from cities import CITIES
-from countries import COUNTRIES, CONTINENTS
+from data.departments import DEPARTMENTS
+from data.cities import CITIES
+from data.countries import COUNTRIES, CONTINENTS
 
 
 class InseeData:

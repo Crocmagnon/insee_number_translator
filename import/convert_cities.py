@@ -24,6 +24,6 @@ with open("correspondance-code-insee-code-postal.json", "r") as f:
             failed.append(base_item)
     import pprint
 
-    with open("cities.py", "w") as writef:
+    with open("../data/cities.py", "w") as writef:
         writef.write(pprint.pformat(mapping, indent=4, compact=True))
         writef.flush()
