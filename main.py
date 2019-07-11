@@ -22,7 +22,7 @@ class InseeData:
             city = insee_number[8:10]
 
         self.foreign = False
-        if department == "99":
+        if department in ["91", "92", "93", "94", "95", "96", "99"]:
             self.foreign = True
             self._country = city
         else:
@@ -79,11 +79,12 @@ class InseeData:
         return self._department
 
     def __str__(self):
-        message = []
+        message = [self.insee_number]
+
         if self.is_valid:
-            message.append("The number is valid")
+            message.append("The number is valid.")
         else:
-            message.append("The number is invalid")
+            message.append("The number is invalid.")
 
         message.append(
             f"You're a {self.gender}, born in {calendar.month_name[self.month]}, probably in {self.year}."
@@ -122,6 +123,7 @@ class InseeData:
 
     def to_dict(self):
         data = {
+            "insee_number": self.insee_number,
             "is_valid": self.is_valid,
             "gender": self.gender_short,
             "month": self.month,
