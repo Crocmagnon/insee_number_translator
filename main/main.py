@@ -152,13 +152,14 @@ class InseeData:
 
 
 def main():
-    # insee_number = "168127982980507"
-    insee_number = "269059913116714"
+    numbers = ["269059913116714", "168127982980507"]
     if len(sys.argv) > 1:
-        insee_number = sys.argv[1]
-    data = InseeData(insee_number)
-    print(data)
-    pprint.pprint(data.to_dict())
+        numbers = sys.argv[1:]
+    for number in numbers:
+        data = InseeData(number)
+        print(data)
+        pprint.pprint(data.to_dict())
+        print('\n\n')
 
 
 if __name__ == '__main__':
