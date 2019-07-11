@@ -212,3 +212,11 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos
+
+
+#Added by cargo
+#
+#already existing elements are commented out
+
+/target
+**/*.rs.bk

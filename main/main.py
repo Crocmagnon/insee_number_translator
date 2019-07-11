@@ -158,4 +158,5 @@ def main():
     pprint.pprint(data.to_dict())
 
 
-main()
+if __name__ == '__main__':
+    main()
