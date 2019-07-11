@@ -60,10 +60,10 @@ type = "write-license-files"
 path = ""
 
 # Package .py files discovered in a local directory.
- [[packaging_rule]]
- type = "package-root"
- path = "."
- packages = ["data", "main"]
+[[packaging_rule]]
+type = "package-root"
+path = "."
+packages = ["data", "main"]
 
 # Package things from a populated virtualenv.
 # [[packaging_rule]]
