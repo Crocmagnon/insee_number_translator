@@ -1,6 +1,7 @@
 import calendar
 import datetime
 import pprint
+import sys
 
 from data.departments import DEPARTMENTS
 from data.cities import CITIES
@@ -153,6 +154,8 @@ class InseeData:
 def main():
     # insee_number = "168127982980507"
     insee_number = "269059913116714"
+    if len(sys.argv) > 1:
+        insee_number = sys.argv[1]
     data = InseeData(insee_number)
     print(data)
     pprint.pprint(data.to_dict())
