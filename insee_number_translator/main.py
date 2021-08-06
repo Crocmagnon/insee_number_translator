@@ -3,9 +3,9 @@ import datetime
 import pprint
 import sys
 
-from data.cities import CITIES
-from data.countries import CONTINENTS, COUNTRIES
-from data.departments import DEPARTMENTS
+from insee_number_translator.data.cities import CITIES
+from insee_number_translator.data.countries import CONTINENTS, COUNTRIES
+from insee_number_translator.data.departments import DEPARTMENTS
 
 
 class InseeData:
