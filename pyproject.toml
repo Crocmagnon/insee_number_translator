@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "insee_number_translator"
-version = "0.2.0"
+version = "0.2.1"
 description = "Translate french INSEE number to meaningful data"
 authors = ["Gabriel Augendre <gabriel@augendre.info>"]
 license = "MIT"
+homepage = "https://git.augendre.info/gaugendre/insee_number_translator"
+repository = "https://git.augendre.info/gaugendre/insee_number_translator"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
