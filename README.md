@@ -8,6 +8,7 @@ Extract data from INSEE number (France)
 pyenv virtualenv 3.9.6 insee
 pyenv local insee
 poetry install
+# restart your shell
 insee 269059913116714 168127982980507
 ```
 
