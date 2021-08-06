@@ -8,8 +8,7 @@ Extract data from INSEE number (France)
 pyenv virtualenv 3.9.6 insee
 pyenv local insee
 poetry install
-python insee_number_translator/main.py
-python insee_number_translator/main.py 123456789123456
+insee 269059913116714 168127982980507
 ```
 
 ## Data sources
