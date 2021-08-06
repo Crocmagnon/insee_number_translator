@@ -3,9 +3,9 @@ import datetime
 import pprint
 import sys
 
-from data.departments import DEPARTMENTS
 from data.cities import CITIES
-from data.countries import COUNTRIES, CONTINENTS
+from data.countries import CONTINENTS, COUNTRIES
+from data.departments import DEPARTMENTS
 
 
 class InseeData:
@@ -159,8 +159,8 @@ def main():
         data = InseeData(number)
         print(data)
         pprint.pprint(data.to_dict())
-        print('\n\n')
+        print("\n\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
