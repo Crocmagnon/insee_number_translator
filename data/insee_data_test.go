@@ -19,4 +19,8 @@ func TestNewInseeDataValid(t *testing.T) {
 	if insee.Gender != gender {
 		t.Errorf("Gender KO. Got %s, expected %s", insee.Gender, gender)
 	}
+	year := 1969
+	if insee.Year != year {
+		t.Errorf("Year KO. Got %d, expected %d", insee.Year, year)
+	}
 }
