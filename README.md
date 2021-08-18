@@ -3,20 +3,16 @@
 Extract data from INSEE number (France)
 
 ## Getting started
-### From package
+### From sources
+#### Run
 ```shell
-# activate your venv
-python -m pip install insee-number-translator
-insee 269059913116714 168127982980507
+go run . 269059913116714 168127982980507
 ```
 
-### From sources
+#### Build & install
 ```shell
-pyenv virtualenv 3.7.9 insee
-pyenv local insee
-poetry install
-# restart your shell
-insee 269059913116714 168127982980507
+go install
+insee_number_translator 269059913116714 168127982980507
 ```
 
 ## Data sources

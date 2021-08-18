@@ -1,6 +1,6 @@
-package main
+package data
 
-var DEPARTMENTS = map[string]string{
+var departments = map[string]string{
 	"01":  "Ain",
 	"02":  "Aisne",
 	"03":  "Allier",
