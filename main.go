@@ -7,7 +7,15 @@ import (
 )
 
 func main() {
+	var preProcess bool
+	flag.BoolVar(&preProcess, "pre-process", false, "Pre-process data files.")
 	flag.Parse()
+
+	if preProcess {
+		data.PreProcessRawData("data/raw_data", "data/curated_data")
+		return
+	}
+
 	numbers := flag.Args()
 	for _, number := range numbers {
 		insee, err := data.NewInseeData(number)

@@ -24,7 +24,7 @@ func TestNewInseeData_ValidForeign(t *testing.T) {
 	assert.Equal(1969, insee.Year)
 	assert.Equal(time.Month(5), insee.Month)
 	assert.Equal(Unknown, insee.Department)
-	assert.Nil(insee.City)
+	assert.Equal("", insee.City)
 	assert.True(insee.Foreign)
 	assert.Equal([]string{"BELGIQUE"}, insee.Countries)
 	assert.Equal(167, insee.OrderOfBirth)
@@ -52,7 +52,7 @@ func TestNewInseeData_InvalidFrench(t *testing.T) {
 	assert.Equal(1968, insee.Year)
 	assert.Equal(time.Month(12), insee.Month)
 	assert.Equal("Deux-Sèvres", insee.Department)
-	assert.Nil(insee.City)
+	assert.Equal(Unknown, insee.City)
 	assert.False(insee.Foreign)
 	assert.Equal([]string{"FRANCE"}, insee.Countries)
 	assert.Equal(805, insee.OrderOfBirth)
@@ -81,8 +81,7 @@ func TestNewInseeData_ValidFrench(t *testing.T) {
 	assert.Equal(time.Month(12), insee.Month)
 	assert.Equal("Ain", insee.Department)
 	assert.NotNil(insee.City)
-	assert.Equal("AMBERIEUX-EN-DOMBES", insee.City.Name)
-	assert.Equal("01330", insee.City.ZipCode)
+	assert.Equal("Ambérieux-en-Dombes", insee.City)
 	assert.False(insee.Foreign)
 	assert.Equal([]string{"FRANCE"}, insee.Countries)
 	assert.Equal(123, insee.OrderOfBirth)
@@ -110,13 +109,9 @@ func TestNewInseeData_ValidMultiCountry(t *testing.T) {
 	assert.Equal(1944, insee.Year)
 	assert.Equal(time.Month(8), insee.Month)
 	assert.Equal(Unknown, insee.Department)
-	assert.Nil(insee.City)
+	assert.Equal("", insee.City)
 	assert.True(insee.Foreign)
-	expectedCountry := []string{
-		"PORTO RICO",
-		"VIERGES DES ETATS-UNIS (ILES)",
-		"TERR. DES ETATS-UNIS D'AMERIQUE EN AMERIQUE",
-	}
+	expectedCountry := []string{"PORTO RICO", "TERR. DES ETATS-UNIS D'AMERIQUE EN AMERIQUE", "VIERGES DES ETATS-UNIS (ILES)"}
 	assert.Equal(expectedCountry, insee.Countries)
 	assert.Equal("Amérique", insee.Continent)
 	assert.Equal(873, insee.OrderOfBirth)
@@ -144,8 +139,7 @@ func TestNewInseeData_ValidFrenchDROM(t *testing.T) {
 	assert.Equal(time.Month(12), insee.Month)
 	assert.Equal("La Réunion", insee.Department)
 	assert.NotNil(insee.City)
-	assert.Equal("LES TROIS-BASSINS", insee.City.Name)
-	assert.Equal("97426", insee.City.ZipCode)
+	assert.Equal("Trois-Bassins", insee.City)
 	assert.False(insee.Foreign)
 	assert.Equal([]string{"FRANCE"}, insee.Countries)
 	assert.Equal(987, insee.OrderOfBirth)
@@ -171,8 +165,7 @@ func TestNewInseeData_ValidFrenchCorsica(t *testing.T) {
 	assert.Equal(number, insee.InseeNumber)
 	assert.Equal("Corse-du-Sud", insee.Department)
 	assert.NotNil(insee.City)
-	assert.Equal("AJACCIO", insee.City.Name)
-	assert.Equal("20000", insee.City.ZipCode)
+	assert.Equal("Ajaccio", insee.City)
 	assert.False(insee.Foreign)
 	assert.Equal([]string{"FRANCE"}, insee.Countries)
 	assert.Equal(23, insee.ControlKey)

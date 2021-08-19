@@ -1,6 +1,7 @@
 package data
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -12,13 +13,22 @@ var Male = "homme"
 var Female = "femme"
 var Unknown = "inconnu(e)"
 
+//go:embed curated_data/countries.json
+var rawCountries []byte
+
+//go:embed curated_data/departments.json
+var rawDepartments []byte
+
+//go:embed curated_data/cities.json
+var rawCities []byte
+
 type InseeData struct {
 	InseeNumber  string     `json:"insee_number"`
 	Gender       string     `json:"gender"`
 	Year         int        `json:"year"`
 	Month        time.Month `json:"month"`
 	Department   string     `json:"department"`
-	City         *City      `json:"city"`
+	City         string     `json:"city"`
 	CityCode     string     `json:"city_code"`
 	Foreign      bool       `json:"foreign"`
 	Countries    []string   `json:"countries"`
@@ -43,7 +53,7 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 	if err != nil && departmentCode != "2A" && departmentCode != "2B" {
 		return nil, err
 	}
-	var city *City
+	var city string
 	var department string
 	countries_ := []string{"FRANCE"}
 	countryCode := ""
@@ -53,19 +63,12 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 		foreign = true
 		countryCode = cityCode
 		cityCode = ""
-		countries_ = countries["99"+countryCode]
+		countries_ = getCountry("99" + countryCode)
 		continent = continents[countryCode[0:1]]
 		department = Unknown
 	} else {
-		c, present := cities[departmentCode+cityCode]
-		if present {
-			city = &c
-		}
-		var depPresent bool
-		department, depPresent = departments[departmentCode]
-		if !depPresent {
-			department = Unknown
-		}
+		city = getCity(departmentCode + cityCode)
+		department = getDepartment(departmentCode)
 	}
 	order, err := strconv.Atoi(num[10:13])
 	if err != nil {
@@ -86,7 +89,7 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 	}
 	year += 2000
 	now := time.Now()
-	birthday := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+	birthday := time.Date(year, month, 1, 0, 0, 0, 0, now.Location())
 	if birthday.After(now) {
 		year -= 100
 	}
@@ -163,8 +166,8 @@ func (insee InseeData) String() string {
 		}
 	} else {
 		zoneType = "cette ville"
-		if insee.City != (*City)(nil) {
-			line = fmt.Sprintf("Vous êtes %s à %s (%s %s, France)", born, insee.City.Name, insee.City.ZipCode, insee.Department)
+		if insee.City != Unknown {
+			line = fmt.Sprintf("Vous êtes %s à %s (%s, France)", born, insee.City, insee.Department)
 		} else {
 			line = fmt.Sprintf("Vous êtes %s dans une ville inconnue portant l'identifiant %s dans le département \"%s\"", born, insee.CityCode, insee.Department)
 		}
@@ -180,4 +183,40 @@ func (insee InseeData) String() string {
 	}
 	result = append(result, line)
 	return strings.Join(result, "\n")
+}
+
+func getCity(cityCode string) string {
+	return getString(cityCode, rawCities)
+}
+
+func getDepartment(departmentCode string) string {
+	return getString(departmentCode, rawDepartments)
+}
+
+func getString(code string, rawData []byte) string {
+	cities := map[string]string{}
+	err := json.Unmarshal(rawData, &cities)
+	if err != nil {
+		return Unknown
+	}
+	item, present := cities[code]
+	if present {
+		return item
+	} else {
+		return Unknown
+	}
+}
+
+func getCountry(code string) []string {
+	cities := map[string][]string{}
+	err := json.Unmarshal(rawCountries, &cities)
+	if err != nil {
+		return []string{}
+	}
+	city, present := cities[code]
+	if present {
+		return city
+	} else {
+		return []string{}
+	}
 }

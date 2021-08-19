@@ -26,6 +26,4 @@ insee_number_translator 269059913116714 168127982980507 299122A00498723 29912974
 
 ## Data sources
 
-* cities : https://public.opendatasoft.com/explore/dataset/correspondance-code-insee-code-postal/export/
-* countries : https://www.insee.fr/fr/information/2028273
-* departments : https://www.data.gouv.fr/fr/datasets/regions-departements-villes-et-villages-de-france-et-doutre-mer/
+* https://www.insee.fr/fr/information/2560452, Millésime 2021 : Téléchargement des fichiers, CSV
