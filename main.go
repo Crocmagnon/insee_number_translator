@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"insee_number_translator/data"
 	"os"
+
+	"git.augendre.info/gaugendre/insee_number_translator/data"
 )
 
 func main() {

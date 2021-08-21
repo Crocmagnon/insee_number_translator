@@ -1,4 +1,4 @@
-module insee_number_translator
+module git.augendre.info/gaugendre/insee_number_translator
 
 go 1.16
 
