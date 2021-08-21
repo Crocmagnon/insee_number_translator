@@ -1,3 +1,5 @@
+// Package data is used to parse the insee number into a usable and human-readable data structure.
+// All the required data is embedded in the package so no external file is required.
 package data
 
 import (
@@ -10,9 +12,14 @@ import (
 )
 
 var (
-	Male    = "homme"
-	Female  = "femme"
+	// Male is one of the possible values for InseeData.Gender.
+	Male = "homme"
+	// Female is the other possible value for InseeData.Gender.
+	Female = "femme"
+	// Unknown is a value used when determining the value of a string field in InseeData was not possible.
 	Unknown = "inconnu(e)"
+	// France is the only item in the default slice for InseeData.Countries.
+	France = "FRANCE"
 )
 
 //go:embed curated_data/countries.json
@@ -24,22 +31,42 @@ var rawDepartments []byte
 //go:embed curated_data/cities.json
 var rawCities []byte
 
+// InseeData contains human-readable data about the insee number used to construct it.
 type InseeData struct {
-	InseeNumber  string     `json:"insee_number"`
-	Gender       string     `json:"gender"`
-	Year         int        `json:"year"`
-	Month        time.Month `json:"month"`
-	Department   string     `json:"department"`
-	City         string     `json:"city"`
-	CityCode     string     `json:"city_code"`
-	Foreign      bool       `json:"foreign"`
-	Countries    []string   `json:"countries"`
-	CountryCode  string     `json:"country_code"`
-	Continent    string     `json:"continent"`
-	OrderOfBirth int        `json:"order_of_birth"`
-	ControlKey   int        `json:"control_key"`
+	// InseeNumber is the raw number, as given.
+	InseeNumber string `json:"insee_number"`
+	// Gender is either Male or Female.
+	Gender string `json:"gender"`
+	// Year of birth.
+	Year int `json:"year"`
+	// Month of birth.
+	Month time.Month `json:"month"`
+	// Department of birth, represented with its name.
+	Department string `json:"department"`
+	// City of birth, represented with its name.
+	City string `json:"city"`
+	// CityCode is the INSEE code of the City of birth.
+	CityCode string `json:"city_code"`
+	// Foreign is false if the person is born in France, true otherwise.
+	Foreign bool `json:"foreign"`
+	// Countries is the list of country names matching the CountryCode.
+	// Some country codes may match multiple countries, so Countries is a slice.
+	// This is always set to `{"FRANCE"}` when Foreign is false.
+	Countries []string `json:"countries"`
+	// CountryCode is the code of the birth country.
+	CountryCode string `json:"country_code"`
+	// Continent of birth.
+	Continent string `json:"continent"`
+	// OrderOfBirth is the order of birth of the person in the city or country (if Foreign) of birth at the year/month of birth.
+	// For example, 384 would mean that the person is the 384th born in the specific city/country on the given year/month.
+	OrderOfBirth int `json:"order_of_birth"`
+	// ControlKey is the complement to 97 of the insee number (minus the last two digits) modulo 97.
+	ControlKey int `json:"control_key"`
 }
 
+// NewInseeData generates an InseeData struct, extracting the data into the relevant fields.
+// The data is converted to a human-readable format before being stored.
+// If a value can't be determined, the corresponding field is generally set to Unknown.
 func NewInseeData(inseeNumber string) (*InseeData, error) {
 	if len(inseeNumber) != 15 {
 		return nil, fmt.Errorf("le numéro INSEE number must contain 15 characters")
@@ -57,7 +84,7 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 	}
 	var city string
 	var department string
-	countries_ := []string{"FRANCE"}
+	countries_ := []string{France}
 	countryCode := ""
 	continent := "Europe"
 	foreign := (dep >= 91 && dep <= 96) || dep == 99
@@ -118,6 +145,8 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 	}, nil
 }
 
+// IsValid returns true when the insee number is valid and false when not.
+// The insee number is valid when it matches its ControlKey.
 func (insee InseeData) IsValid() (bool, error) {
 	r := strings.NewReplacer(
 		"2A", "19",
@@ -132,6 +161,7 @@ func (insee InseeData) IsValid() (bool, error) {
 	return code == insee.ControlKey, nil
 }
 
+// String returns a string representation of the InseeData in a human-readable format, suited for printing to stdout.
 func (insee InseeData) String() string {
 	var result []string
 	result = append(result, insee.InseeNumber)
