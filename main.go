@@ -4,19 +4,27 @@ import (
 	"flag"
 	"fmt"
 	"insee_number_translator/data"
+	"os"
 )
 
 func main() {
-	var preProcess bool
-	flag.BoolVar(&preProcess, "pre-process", false, "Pre-process data files.")
+	flag.Usage = func() {
+		out := flag.CommandLine.Output()
+		fmt.Fprintf(out, "Usage: %s [flags] [numero_insee...]\n", os.Args[0])
+		fmt.Fprintf(out, "\nCe programme décode les informations contenues dans votre numéro INSEE (numéro de sécurité sociale français)")
+		fmt.Fprintf(out, "et vous les affiche d'une manière lisible et claire.\n")
+		flag.PrintDefaults()
+		fmt.Fprintf(out, "\nLes arguments numero_insee doivent comporter 15 caractères. Il est possible d'en spécifier plusieurs séparés par un espace.\n")
+	}
+
 	flag.Parse()
 
-	if preProcess {
-		data.PreProcessRawData("data/raw_data", "data/curated_data")
+	numbers := flag.Args()
+	if len(numbers) == 0 {
+		flag.Usage()
 		return
 	}
 
-	numbers := flag.Args()
 	for _, number := range numbers {
 		insee, err := data.NewInseeData(number)
 		if err != nil {

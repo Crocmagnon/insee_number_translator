@@ -1,4 +1,4 @@
-package data
+package main
 
 import (
 	"encoding/csv"
@@ -8,27 +8,33 @@ import (
 	"os"
 )
 
+func main() {
+	fmt.Println("This is intended for tinkerers only, not for end users.")
+	PreProcessRawData("data/raw_data", "data/curated_data")
+}
+
 func PreProcessRawData(sourceFolder, targetFolder string) {
 	err := os.MkdirAll(targetFolder, 0755)
 	if err != nil {
 		fmt.Printf("Error, couldn't create target folder %s: %s", targetFolder, err)
 		return
 	}
-	err = preProcessCities(sourceFolder+"/commune2021.csv", targetFolder+"/cities.json")
+	err = preProcessCities(sourceFolder+"/commune.csv", targetFolder+"/cities.json")
 	if err != nil {
-		fmt.Println("Error during cities pre processing")
-		fmt.Println(err.Error())
+		fmt.Fprintln(os.Stderr, "Error during cities pre processing")
+		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	err = preProcessDepartments(sourceFolder+"/departement2021.csv", targetFolder+"/departments.json")
+	err = preProcessDepartments(sourceFolder+"/departement.csv", targetFolder+"/departments.json")
 	if err != nil {
-		fmt.Println("Error during departments pre processing")
-		fmt.Println(err.Error())
+		fmt.Fprintln(os.Stderr, "Error during departments pre processing")
+		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	err = preProcessCountries(sourceFolder+"/pays2021.csv", targetFolder+"/countries.json")
+	err = preProcessCountries(sourceFolder+"/pays.csv", targetFolder+"/countries.json")
 	if err != nil {
-		fmt.Println("Error during countries pre processing")
-		fmt.Println(err.Error())
+		fmt.Fprintln(os.Stderr, "Error during countries pre processing")
+		fmt.Fprintln(os.Stderr, err.Error())
 	}
+	fmt.Println("Finished pre-processing data.")
 }
 
 func preProcessCities(sourceFileName, targetFileName string) error {

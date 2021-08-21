@@ -40,7 +40,7 @@ type InseeData struct {
 
 func NewInseeData(inseeNumber string) (*InseeData, error) {
 	if len(inseeNumber) != 15 {
-		return nil, fmt.Errorf("provided insee number must contain 15 characters")
+		return nil, fmt.Errorf("le numéro INSEE number must contain 15 characters")
 	}
 	num := inseeNumber
 	departmentCode := num[5:7]
