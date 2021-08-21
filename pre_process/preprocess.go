@@ -14,7 +14,7 @@ func main() {
 }
 
 func PreProcessRawData(sourceFolder, targetFolder string) {
-	err := os.MkdirAll(targetFolder, 0755)
+	err := os.MkdirAll(targetFolder, 0o755)
 	if err != nil {
 		fmt.Printf("Error, couldn't create target folder %s: %s", targetFolder, err)
 		return
@@ -89,7 +89,7 @@ func preProcessSimpleFile(sourceFileName, targetFileName, codeColumn string) err
 		return err
 	}
 
-	err = ioutil.WriteFile(targetFileName, itemsJson, 0644)
+	err = ioutil.WriteFile(targetFileName, itemsJson, 0o644)
 	if err != nil {
 		return err
 	}
@@ -146,7 +146,7 @@ func preProcessCountries(sourceFileName, targetFileName string) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(targetFileName, citiesJson, 0644)
+	err = ioutil.WriteFile(targetFileName, citiesJson, 0o644)
 	if err != nil {
 		return err
 	}

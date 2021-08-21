@@ -9,9 +9,11 @@ import (
 	"time"
 )
 
-var Male = "homme"
-var Female = "femme"
-var Unknown = "inconnu(e)"
+var (
+	Male    = "homme"
+	Female  = "femme"
+	Unknown = "inconnu(e)"
+)
 
 //go:embed curated_data/countries.json
 var rawCountries []byte
