@@ -1,17 +1,13 @@
+exclude: ^data/(curated|raw)_data
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-ast
-        types: [python]
       - id: check-json
-        types: [json]
       - id: check-toml
-        types: [toml]
       - id: check-xml
-        types: [xml]
       - id: check-yaml
-        types: [yaml]
       - id: end-of-file-fixer
       - id: check-merge-conflict
       - id: pretty-format-json
@@ -21,13 +17,15 @@ repos:
       - id: trailing-whitespace
         args:
           - --markdown-linebreak-ext=md
-  - repo: https://github.com/timothycrosley/isort
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.42.0
+    hooks:
+      - id: golangci-lint
+  - repo: https://github.com/PyCQA/isort
     rev: 5.9.3
     hooks:
       - id: isort
-        types: [python]
   - repo: https://github.com/psf/black
     rev: 21.7b0
     hooks:
     - id: black
-      types: [python]

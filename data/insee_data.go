@@ -153,7 +153,6 @@ func (insee InseeData) String() string {
 	}
 	line = fmt.Sprintf("Vous êtes %s %s, %s en %s probablement en %d.", one, insee.Gender, born, frenchMonth(insee.Month), insee.Year)
 	result = append(result, line)
-	line = ""
 	var zoneType string
 	if insee.Foreign {
 		zoneType = "ce pays"
