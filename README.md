@@ -87,7 +87,10 @@ invoke pre-process
 This requires [`invoke`](https://www.pyinvoke.org/) on your machine.
 
 ## Release
-Create a tag using `inv tag <tag_name>`, then run `inv build <tag_name>` to build the binaries.
+Run tests, create a tag and build binaries:
+```
+inv release <version_name>
+```
 
 # Data sources
 
