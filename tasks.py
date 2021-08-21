@@ -39,6 +39,7 @@ def release(context, version_name):
 def tag(context, version_name):
     """Create & push a git tag"""
     context: Context
+    version_name = fix_version_name(version_name)
     context.run(f"git tag -a {version_name} -m '{version_name}'", echo=True)
     context.run("git push --follow-tags", echo=True)
 
@@ -46,6 +47,7 @@ def tag(context, version_name):
 @task
 def build(context, version_name):
     """Cross-platform build"""
+    version_name = fix_version_name(version_name)
     with ThreadPoolExecutor() as pool:
         for target in TARGETS:
             os, arch = target.split("/")
@@ -78,3 +80,9 @@ def pre_process(context):
 
     with context.cd(BASE_DIR):
         context.run("go run ./pre_process")
+
+
+def fix_version_name(version_name: str):
+    if not version_name.startswith("v"):
+        return f"v{version_name}"
+    return version_name
