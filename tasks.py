@@ -1,3 +1,4 @@
+import re
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -17,6 +18,7 @@ TARGETS = [
     "windows/amd64",
     "windows/arm",
 ]
+BASE_DIR = Path(__file__).parent.resolve(strict=True)
 
 
 @task
@@ -36,12 +38,29 @@ def build(context, version_name):
             binary_name = f"insee-{version_name}-{os}-{arch}"
             if os == "windows":
                 binary_name += ".exe"
-            binary_path = (
-                Path(__file__).resolve(strict=True).parent / "dist" / binary_name
-            )
+            binary_path = BASE_DIR / "dist" / binary_name
             pool.submit(
                 context.run,
                 f"go build -o {binary_path}",
                 env={"GOOS": os, "GOARCH": arch},
                 echo=True,
             )
+
+
+@task
+def pre_process(context):
+    """Pre-process raw data into JSON"""
+    files_to_rename = {
+        r"commune.*\.csv": "commune.csv",
+        r"departement.*\.csv": "departement.csv",
+        r"pays.*\.csv": "pays.csv",
+    }
+    raw_data_dir = BASE_DIR / "data" / "raw_data"
+    for file in raw_data_dir.iterdir():
+        for reg, target_name in files_to_rename.items():
+            reg = re.compile(reg)
+            if reg.match(file.name):
+                file.rename(raw_data_dir / target_name)
+
+    with context.cd(BASE_DIR):
+        context.run("go run ./pre_process")
