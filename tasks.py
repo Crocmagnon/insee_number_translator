@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).parent.resolve(strict=True)
 @task
 def test(context):
     """Run tests"""
-    context.run("go test ./...")
+    context: Context
+    context.run(f"go test {BASE_DIR}/...", echo=True)
 
 
 @task(pre=[test])
@@ -38,8 +39,8 @@ def release(context, version_name):
 def tag(context, version_name):
     """Create & push a git tag"""
     context: Context
-    context.run(f"git tag -a {version_name} -m '{version_name}'")
-    context.run("git push --follow-tags")
+    context.run(f"git tag -a {version_name} -m '{version_name}'", echo=True)
+    context.run("git push --follow-tags", echo=True)
 
 
 @task
