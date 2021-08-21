@@ -84,7 +84,7 @@ Then, unzip the file in `data/raw_data` and run the following command:
 invoke pre-process
 ```
 
-This requires [`invoke`](https://www.pyinvoke.org/) on your machine.
+This requires [`invoke`](https://www.pyinvoke.org/) on your machine (run `pip install -r requirements.txt`).
 
 ## Release
 Run tests, create a tag and build binaries:
