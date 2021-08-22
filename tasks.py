@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).parent.resolve(strict=True)
 def test(context):
     """Run tests"""
     context: Context
-    context.run(f"go test {BASE_DIR}/...", echo=True)
+    with context.cd(BASE_DIR):
+        context.run(f"go test ./... -race -bench .", echo=True)
 
 
 @task(pre=[test])

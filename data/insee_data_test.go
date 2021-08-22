@@ -171,3 +171,13 @@ func TestNewInseeData_ValidFrenchCorsica(t *testing.T) {
 	assert.Equal([]string{"FRANCE"}, insee.Countries)
 	assert.Equal(23, insee.ControlKey)
 }
+
+var inseeResult *InseeData
+
+func BenchmarkNewInseeData(b *testing.B) {
+	var in *InseeData
+	for i := 0; i < b.N; i++ {
+		in, _ = NewInseeData("299122A00498723")
+	}
+	inseeResult = in
+}
