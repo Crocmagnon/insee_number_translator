@@ -31,7 +31,7 @@ def test(context):
     """Run tests"""
     context: Context
     with context.cd(BASE_DIR):
-        context.run(f"go test ./... -race -bench .", echo=True)
+        context.run(f"go test ./... -race .", echo=True)
 
 
 @task
@@ -40,12 +40,13 @@ def clean(context):
     context.run(f"rm -rf {DIST_DIR}", echo=True)
 
 
-@task(pre=[test], post=[clean])
+@task(pre=[clean, test], post=[clean])
 def release(context, version_name):
     """Create & push git tag + build binaries"""
     tag(context, version_name)
     binaries = build(context, version_name)
-    upload(context, version_name, binaries)
+    archives = compress(context, binaries)
+    upload(context, version_name, archives)
 
 
 @task(pre=[test])
@@ -80,7 +81,27 @@ def build(context, version_name):
 
 
 @task
-def upload(ctx, version_name, binaries):
+def compress(context, binaries):
+    """Cross-platform build"""
+    archives = []
+    with ThreadPoolExecutor() as pool:
+        for binary in binaries:
+            binary_name = binary.name
+            archive_path = DIST_DIR / f"{binary_name}.tar.gz"
+            archives.append(archive_path)
+            pool.submit(_compress_single_binary, context, archive_path, binary_name)
+    return archives
+
+
+def _compress_single_binary(context, archive_path, binary_name):
+    with context.cd(DIST_DIR):
+        context.run(
+            f"tar czf {archive_path} {binary_name} && rm {binary_name}", echo=True
+        )
+
+
+@task
+def upload(ctx, version_name, upload_files):
     context: Context
     version_name = fix_version_name(version_name)
     session = requests.Session()
@@ -97,17 +118,17 @@ def upload(ctx, version_name, binaries):
     print(f"The draft release has been created at {html_url}")
     api_url = resp.get("url") + "/assets"
     with ThreadPoolExecutor() as pool:
-        for binary in binaries:
-            pool.submit(post_attachment, api_url, binary, session)
+        for upload_file in upload_files:
+            pool.submit(post_attachment, api_url, upload_file, session)
     print(f"All uploads are finished. Update & publish your draft: {html_url}")
 
 
-def post_attachment(api_url, binary, session):
-    binary = Path(binary)
-    name = binary.name
+def post_attachment(api_url, upload_file, session):
+    upload_file = Path(upload_file)
+    name = upload_file.name
     url = api_url + f"?name={name}"
     print(f"Uploading {name}...")
-    with open(binary, "rb") as f:
+    with open(upload_file, "rb") as f:
         res = session.post(url, files={"attachment": f})
         status_code = res.status_code
         if status_code != 201:
