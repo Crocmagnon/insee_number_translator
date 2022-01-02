@@ -95,3 +95,6 @@ inv release <version_name>
 # Data sources
 
 * https://www.insee.fr/fr/information/2560452, Millésime 2021 : Téléchargement des fichiers, CSV
+
+# Reuse
+If you do reuse my work, please consider linking back to this repository 🙂
