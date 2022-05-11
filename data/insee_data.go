@@ -69,7 +69,7 @@ type InseeData struct {
 // If a value can't be determined, the corresponding field is generally set to Unknown.
 func NewInseeData(inseeNumber string) (*InseeData, error) {
 	if len(inseeNumber) != 15 {
-		return nil, fmt.Errorf("le numéro INSEE number must contain 15 characters")
+		return nil, fmt.Errorf("le numéro INSEE doit contenir 15 caractères")
 	}
 	num := inseeNumber
 	departmentCode := num[5:7]
