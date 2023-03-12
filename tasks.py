@@ -28,21 +28,20 @@ GITEA_TOKEN = os.getenv("GITEA_TOKEN")
 
 
 @task
-def test(context):
+def test(context: Context):
     """Run tests"""
-    context: Context
     with context.cd(BASE_DIR):
         context.run(f"go test ./... -race .", echo=True)
 
 
 @task
-def clean(context):
+def clean(context: Context):
     """Clean dist files"""
     context.run(f"rm -rf {DIST_DIR}", echo=True)
 
 
 @task(pre=[clean, test], post=[clean])
-def release(context, version_name):
+def release(context: Context, version_name):
     """Create & push git tag + build binaries"""
     tag(context, version_name)
     binaries = build(context, version_name)
@@ -51,16 +50,15 @@ def release(context, version_name):
 
 
 @task(pre=[test])
-def tag(context, version_name):
+def tag(context: Context, version_name):
     """Create & push a git tag"""
-    context: Context
     version_name = fix_version_name(version_name)
     context.run(f"git tag -a {version_name} -m '{version_name}'", echo=True)
     context.run("git push --follow-tags", echo=True)
 
 
 @task
-def build(context, version_name):
+def build(context: Context, version_name):
     """Cross-platform build"""
     version_name = fix_version_name(version_name)
     binaries = []
@@ -82,8 +80,8 @@ def build(context, version_name):
 
 
 @task
-def compress(context, binaries):
-    """Cross-platform build"""
+def compress(context: Context, binaries):
+    """Compress binaries to .tar.gz"""
     archives = []
     with ThreadPoolExecutor() as pool:
         for binary in binaries:
@@ -102,8 +100,7 @@ def _compress_single_binary(context, archive_path, binary_name):
 
 
 @task
-def upload(ctx, version_name, upload_files):
-    context: Context
+def upload(ctx: Context, version_name, upload_files):
     version_name = fix_version_name(version_name)
     session = requests.Session()
     if not GITEA_TOKEN:
@@ -138,7 +135,7 @@ def post_attachment(api_url, upload_file, session):
 
 
 @task
-def pre_process(context):
+def pre_process(context: Context):
     """Pre-process raw data into JSON"""
     files_to_rename = {
         r"commune.*\.csv": "commune.csv",

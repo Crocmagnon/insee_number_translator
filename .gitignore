@@ -221,3 +221,4 @@ Temporary Items
 
 /target
 **/*.rs.bk
+.direnv
