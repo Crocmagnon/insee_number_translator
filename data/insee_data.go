@@ -67,6 +67,7 @@ type InseeData struct {
 // NewInseeData generates an InseeData struct, extracting the data into the relevant fields.
 // The data is converted to a human-readable format before being stored.
 // If a value can't be determined, the corresponding field is generally set to Unknown.
+// It returns an error when the given number isn't 15 characters long.
 func NewInseeData(inseeNumber string) (*InseeData, error) {
 	if len(inseeNumber) != 15 {
 		return nil, fmt.Errorf("le numéro INSEE doit contenir 15 caractères")
@@ -147,6 +148,7 @@ func NewInseeData(inseeNumber string) (*InseeData, error) {
 
 // IsValid returns true when the insee number is valid and false when not.
 // The insee number is valid when it matches its ControlKey.
+// It returns an error when the insee number can't be converted to an integer.
 func (insee InseeData) IsValid() (bool, error) {
 	r := strings.NewReplacer(
 		"2A", "19",
