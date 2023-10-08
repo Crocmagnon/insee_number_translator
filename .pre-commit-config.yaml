@@ -19,15 +19,9 @@ repos:
         args:
           - --markdown-linebreak-ext=md
   - repo: https://github.com/golangci/golangci-lint
-    rev: v1.42.0
+    rev: v1.54.2
     hooks:
       - id: golangci-lint
-  - repo: https://github.com/TekWizely/pre-commit-golang
-    rev: v1.0.0-beta.4
-    hooks:
-      - id: go-fumpt
-        args:
-          - -w
   - repo: https://github.com/PyCQA/isort
     rev: 5.9.3
     hooks:
